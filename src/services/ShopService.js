@@ -9,7 +9,7 @@ const ShopService = {
     if (limit !== null) params.limit = limit;
 
     try {
-      console.log("📥 [GET] /products", params);
+      // console.log("📥 [GET] /products", params);
       const res = await axios.get(`${API_PREFIX}products`, { params });
 
       const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;

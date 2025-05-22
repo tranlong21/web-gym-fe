@@ -82,6 +82,7 @@ export const getUsers = async (page = 0, limit = 3) => {
             date_of_birth: user.date_of_birth,
             height_cm: user.height_cm,
             weight_kg: user.weight_kg,
+            is_active: user.is_active, 
         }));
 
 
@@ -90,4 +91,28 @@ export const getUsers = async (page = 0, limit = 3) => {
         console.error("Error fetching users:", error);
         throw error;
     }
+};
+
+// Ban (xóa mềm) người dùng bằng DELETE + body
+export const banUserById = async (id, reason) => {
+  try {
+    const response = await fetch(`${API_PREFIX}users/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({ ban_reason: reason }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to ban user');
+    }
+
+    return { success: true, message: 'Khóa người dùng thành công!' };
+  } catch (error) {
+    console.error('Lỗi khi khóa người dùng:', error);
+    return { success: false, message: error.message };
+  }
 };

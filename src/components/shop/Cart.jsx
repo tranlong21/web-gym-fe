@@ -42,6 +42,12 @@ const Cart = () => {
 
   const handleCheckout = () => {
     const selected = cartItems.filter(item => selectedItems.includes(item.product.id));
+
+    if (selected.length === 0) {
+      alert("❗Bạn chưa chọn sản phẩm nào để thanh toán.");
+      return;
+    }
+
     localStorage.setItem("checkoutItems", JSON.stringify(selected));
     navigate("/checkout");
   };
