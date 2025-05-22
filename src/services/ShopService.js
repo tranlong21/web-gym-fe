@@ -12,12 +12,13 @@ const ShopService = {
       console.log("📥 [GET] /products", params);
       const res = await axios.get(`${API_PREFIX}products`, { params });
 
-      // ✅ Lấy đầy đủ ID sản phẩm
+      const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
+
       const products = res.data.products.map((p) => ({
-        id: p.id, // 🧠 Lấy ID để sử dụng khi chỉnh sửa / xóa
+        id: p.id,
         name: p.name,
         price: p.price,
-        thumbnail: p.thumbnail,
+        thumbnail: p.thumbnail ? BASE_IMAGE_URL + p.thumbnail : null,
         description: p.description,
         category_id: p.category_id,
       }));
@@ -28,6 +29,7 @@ const ShopService = {
       throw error;
     }
   },
+
 
   createProduct: async (data) => {
     const { thumbnail, ...info } = data;

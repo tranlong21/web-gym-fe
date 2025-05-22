@@ -4,18 +4,27 @@ const API_PREFIX = 'http://localhost:8091/api/v1/';
 // Hàm lấy thông tin người dùng theo ID
 export const getUserById = async (id) => {
     try {
-        const response = await fetch(`${API_PREFIX}users/get/${id}`);
+        const response = await fetch(`${API_PREFIX}users/get/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+
         if (!response.ok) {
             const errorDetails = await response.json();
             console.error('Chi tiết lỗi khi lấy thông tin người dùng:', errorDetails);
             throw new Error('Failed to fetch user data');
         }
+
         return await response.json(); // Trả về thông tin người dùng
     } catch (error) {
         console.error('Error fetching user data:', error);
         throw error;
     }
 };
+
 
 // Hàm cập nhật thông tin người dùng theo ID
 export const updateUserById = async (id, updatedData) => {

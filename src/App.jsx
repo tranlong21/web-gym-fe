@@ -14,6 +14,7 @@ import AdminDashboard from "./components/layout _admin/AdminDashboard.jsx";
 import ShopAdmin from "./components/admin/ShopAdmin.jsx";
 import ManagerUsers from "./components/admin/ManagerUsers.jsx";
 import Muscle from "./components/muscle.jsx"; 
+import LandingPageBan from "./components/LandingPageBan.jsx";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/banned" element={<LandingPageBan />} />
         <Route path="/header" element={<Header />} /> 
         <Route path="/admin" element={<AdminGym />} />
         <Route path="/admin/exercises" element={<ExercisesAdmin />} />
