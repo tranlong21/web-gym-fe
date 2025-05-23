@@ -14,6 +14,7 @@ import ExercisesAdmin from "./components/admin/ExercisesAdmin.jsx";
 import AdminDashboard from "./components/layout _admin/AdminDashboard.jsx"; 
 import ShopAdmin from "./components/admin/ShopAdmin.jsx";
 import ManagerUsers from "./components/admin/ManagerUsers.jsx";
+import OrderAdmin from "./components/admin/OrderAdmin.jsx";
 import Muscle from "./components/muscle.jsx"; 
 import LandingPageBan from "./components/LandingPageBan.jsx";
 import HistoryOrders from "./components/HistoryOrders.jsx";
@@ -38,7 +39,8 @@ function App() {
         <Route path="/admin/exercises" element={<ExercisesAdmin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/shop" element={<ShopAdmin />} /> 
-        <Route path="/admin/users" element={<ManagerUsers />} /> 
+        <Route path="/admin/users" element={<ManagerUsers />} />
+        <Route path="/admin/orders" element={<OrderAdmin />} />
       </Routes>
     </BrowserRouter>
   );
