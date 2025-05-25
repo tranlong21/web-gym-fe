@@ -21,9 +21,9 @@ const IconChatBot = () => {
             >
                 <span className="relative peer w-14 h-14 p-4 hover:text-accent">
                     {isChatOpen ? (
-                        <FaTimes size={24} className="text-white" /> // Hiển thị dấu "X" khi mở
+                        <FaTimes size={24} className="text-green-600" /> 
                     ) : (
-                        <FaRobot size={24} className="text-white" /> // Hiển thị icon ChatBot khi đóng
+                        <FaRobot size={24} className="text-green-600" />
                     )}
                 </span>
             </button>

@@ -3,7 +3,6 @@ import {
   FaChartBar,
   FaUsers,
   FaDumbbell,
-  FaCog,
   FaSignOutAlt,
   FaRunning,
   FaClipboardList,
@@ -16,7 +15,6 @@ const navItems = [
   { name: "Users", icon: <FaUsers />, path: "/admin/users" },
   { name: "Exercises", icon: <FaRunning />, path: "/admin/exercises" },
   { name: "Orders", icon: <FaClipboardList />, path: "/admin/orders" },
-  { name: "Settings", icon: <FaCog />, path: "/admin/settings" },
 ];
 
 const AdminSidebar = () => {

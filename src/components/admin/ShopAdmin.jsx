@@ -107,16 +107,16 @@ const ShopAdmin = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full text-sm text-left">
+            <table className="min-w-full text-sm text-left table-fixed border border-gray-300 shadow">
               <thead className="bg-gray-100 border-b">
                 <tr>
-                  <th className="px-4 py-3">STT</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Price</th>
-                  <th className="px-4 py-3">Thumbnail</th>
-                  <th className="px-4 py-3">Description</th>
-                  <th className="px-4 py-3">Category</th>
-                  <th className="px-4 py-3">Actions</th>
+                  <th className="border border-gray-300 px-4 py-3">STT</th>
+                  <th className="px-4 py-3 border border-gray-300">Name</th>
+                  <th className="px-4 py-3 border border-gray-300">Price</th>
+                  <th className="px-4 py-3 border border-gray-300">Thumbnail</th>
+                  <th className="px-4 py-3 border border-gray-300">Description</th>
+                  <th className="px-4 py-3 border border-gray-300">Category</th>
+                  <th className="px-4 py-3 border border-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -126,19 +126,19 @@ const ShopAdmin = () => {
                   )
                   .map((item, index) => (
                     <tr key={item.id}>
-                      <td className="px-4 py-3">{page * limit + index + 1}</td>
-                      <td className="px-4 py-3">{item.name}</td>
-                      <td className="px-4 py-3">{item.price.toLocaleString()} VND</td>
-                      <td className="px-4 py-3">
+                      <td className="px-4 py-3 border border-gray-300">{page * limit + index + 1}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.name}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.price.toLocaleString()} VND</td>
+                      <td className="px-4 py-3 border border-gray-300">
                         <img
                           src={item.thumbnail || "/placeholder.jpg"}
                           alt={item.name}
                           className="w-16 h-16 object-cover rounded"
                         />
                       </td>
-                      <td className="px-4 py-3">{item.description}</td>
-                      <td className="px-4 py-3">{item.category_id}</td>
-                      <td className="px-4 py-3 flex gap-3">
+                      <td className="px-4 py-3 border border-gray-300">{item.description}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.category_id}</td>
+                      <td className="px-4 py-3 flex gap-3 border border-gray-300">
                         <button
                           onClick={() => {
                             setEditingItem(item);

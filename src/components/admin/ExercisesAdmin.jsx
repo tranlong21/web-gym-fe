@@ -107,21 +107,21 @@ const ExercisesAdmin = () => {
           </div>
         ) : (
           <div className="overflow-x-auto max-h-[80vh] overflow-y-auto">
-            <table className="min-w-full text-sm text-left">
+            <table className="min-w-full text-sm text-left border border-gray-300 p-2">
               <thead className="bg-gray-100 border-b">
                 <tr>
-                  <th className="px-4 py-3">STT</th>
-                  <th className="px-4 py-3">Name</th>
-                  <th className="px-4 py-3">Muscle Group ID</th>
-                  <th className="px-4 py-3">Muscle Section</th>
-                  <th className="px-4 py-3">Technique</th>
-                  <th className="px-4 py-3">Equipment</th>
-                  <th className="px-4 py-3">% Target</th>
-                  <th className="px-4 py-3">Sets</th>
-                  <th className="px-4 py-3">Reps</th>
-                  <th className="px-4 py-3">Rest</th>
-                  <th className="px-4 py-3 text-center">Video</th>
-                  <th className="px-4 py-3">Actions</th>
+                  <th className="px-4 py-3 border border-gray-300">STT</th>
+                  <th className="px-4 py-3 border border-gray-300">Name</th>
+                  <th className="px-4 py-3 border border-gray-300">Muscle Group ID</th>
+                  <th className="px-4 py-3 border border-gray-300">Muscle Section</th>
+                  <th className="px-4 py-3 border border-gray-300">Technique</th>
+                  <th className="px-4 py-3 border border-gray-300">Equipment</th>
+                  <th className="px-4 py-3 border border-gray-300">% Target</th>
+                  <th className="px-4 py-3 border border-gray-300">Sets</th>
+                  <th className="px-4 py-3 border border-gray-300">Reps</th>
+                  <th className="px-4 py-3 ">Rest</th>
+                  <th className="px-4 py-3 text-center border border-gray-300">Video</th>
+                  <th className="px-4 py-3 border border-gray-300">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -134,16 +134,16 @@ const ExercisesAdmin = () => {
                   .map((item, index) => (
                     <tr key={item.id || index} className="border-b hover:bg-gray-50">
                       <td className="px-4 py-3">{page * limit + index + 1}</td>
-                      <td className="px-4 py-3">{item.exercise_name}</td>
-                      <td className="px-4 py-3">{item.muscle_group_id}</td>
-                      <td className="px-4 py-3">{item.muscle_section}</td>
-                      <td className="px-4 py-3">{item.technique_description}</td>
-                      <td className="px-4 py-3">{item.equipment_required}</td>
-                      <td className="px-4 py-3">{item.target_muscle_percentage}</td>
-                      <td className="px-4 py-3">{item.recommended_sets}</td>
-                      <td className="px-4 py-3">{item.recommended_reps}</td>
-                      <td className="px-4 py-3">{item.rest_between_sets}</td>
-                      <td className="px-4 py-3 text-center">
+                      <td className="px-4 py-3 border border-gray-300">{item.exercise_name}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.muscle_group_id}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.muscle_section}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.technique_description}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.equipment_required}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.target_muscle_percentage}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.recommended_sets}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.recommended_reps}</td>
+                      <td className="px-4 py-3 border border-gray-300">{item.rest_between_sets}</td>
+                      <td className="px-4 py-3 text-center border border-gray-300">
                         {item.video_url ? (
                           <a
                             href={item.video_url}

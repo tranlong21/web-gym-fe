@@ -17,7 +17,7 @@ Websites:
 */
 
 
-
+// Path bodymap
 export const musclePathsFront = [
   {
     label: "Đùi trái",
