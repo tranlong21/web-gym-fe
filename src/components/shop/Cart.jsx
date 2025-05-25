@@ -58,65 +58,72 @@ const Cart = () => {
       {cartItems.length === 0 ? (
         <p>Không có sản phẩm.</p>
       ) : (
-        <div className="space-y-3 max-h-[400px] overflow-y-auto">
-          {cartItems.map((item, index) => (
-            <div
-              key={index}
-              className="flex gap-3 items-center border p-2 rounded"
-            >
-              <input
-                type="checkbox"
-                checked={selectedItems.includes(item.product.id)}
-                onChange={() => toggleSelect(item.product.id)}
-              />
-              <img
-                src={item.product.thumbnail || "/placeholder.jpg"}
-                alt={item.product.name}
-                className="w-16 h-16 object-contain rounded"
-              />
-              <div className="flex-1">
-                <p className="font-semibold">{item.product.name}</p>
-                <div className="flex items-center gap-2 text-sm mt-1">
-                  <button
-                    onClick={() => updateQuantity(item.product.id, -1)}
-                    className="px-2 bg-gray-200 rounded"
-                  >−</button>
-                  <span>{item.quantity}</span>
-                  <button
-                    onClick={() => updateQuantity(item.product.id, 1)}
-                    className="px-2 bg-gray-200 rounded"
-                  >+</button>
-                </div>
-                <p className="text-green-600 text-sm mt-1">
-                  {(item.product?.price || 0).toLocaleString()} đ
-                </p>
-              </div>
-              <button
-                className="text-red-500 hover:underline text-sm"
-                onClick={async () => {
-                  await CartService.removeItem(user.id, item.product.id);
-                  await fetchCart();
-                }}
+        <div className="flex flex-col max-h-[400px] border rounded">
+          {/* Danh sách sản phẩm có scroll */}
+          <div className="space-y-3 overflow-y-auto p-2 max-h-[400px]">
+            {cartItems.map((item, index) => (
+              <div
+                key={index}
+                className="flex gap-3 items-center border p-2 rounded"
               >
-                Xóa
-              </button>
-            </div>
-          ))}
-          <div className="pt-2 text-right font-bold border-t">
-            Tổng: {total.toLocaleString()} đ
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.product.id)}
+                  onChange={() => toggleSelect(item.product.id)}
+                />
+                <img
+                  src={item.product.thumbnail || "/placeholder.jpg"}
+                  alt={item.product.name}
+                  className="w-16 h-16 object-contain rounded"
+                />
+                <div className="flex-1">
+                  <p className="font-semibold">{item.product.name}</p>
+                  <div className="flex items-center gap-2 text-sm mt-1">
+                    <button
+                      onClick={() => updateQuantity(item.product.id, -1)}
+                      className="px-2 bg-gray-200 rounded"
+                    >−</button>
+                    <span>{item.quantity}</span>
+                    <button
+                      onClick={() => updateQuantity(item.product.id, 1)}
+                      className="px-2 bg-gray-200 rounded"
+                    >+</button>
+                  </div>
+                  <p className="text-green-600 text-sm mt-1">
+                    {(item.product?.price || 0).toLocaleString()} đ
+                  </p>
+                </div>
+                <button
+                  className="text-red-500 hover:underline text-sm"
+                  onClick={async () => {
+                    await CartService.removeItem(user.id, item.product.id);
+                    await fetchCart();
+                  }}
+                >
+                  Xóa
+                </button>
+              </div>
+            ))}
           </div>
-          <button
-            onClick={handleCheckout}
-            className="mt-3 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm"
-          >
-            Thanh toán
-          </button>
-          <button
-            onClick={clearCart}
-            className="mt-2 w-full bg-red-500 text-white py-1 rounded hover:bg-red-600 text-sm"
-          >
-            Xóa toàn bộ giỏ hàng
-          </button>
+
+          {/* Thanh toán cố định */}
+          <div className="p-3 border-t bg-white">
+            <div className="text-right font-bold mb-2">
+              Tổng: {total.toLocaleString()} đ
+            </div>
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 text-sm"
+            >
+              Thanh toán
+            </button>
+            <button
+              onClick={clearCart}
+              className="mt-2 w-full bg-red-500 text-white py-1 rounded hover:bg-red-600 text-sm"
+            >
+              Xóa toàn bộ giỏ hàng
+            </button>
+          </div>
         </div>
       )}
     </div>

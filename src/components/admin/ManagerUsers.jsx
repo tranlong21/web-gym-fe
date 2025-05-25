@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUsers, banUserById } from "../../services/userService";
+import { getUsers, banUserById, unlockUserById } from "../../services/userService";
 import AdminSidebar from "../layout _admin/AdminSidebar";
 import UserFormModal from "../share/modals/UserFormModal";
 import BlockUserModal from "../share/modals/BlockUserModal";
@@ -46,14 +46,22 @@ const ManagerUsers = () => {
     }
   };
 
-  const handleOpenBlockModal = (user) => {
+  const handleOpenBlockModal = async (user) => {
     if (!user.is_active) {
       const confirmUnlock = window.confirm(`Bạn chắc chắn muốn mở khóa người dùng "${user.username}" chứ?`);
       if (confirmUnlock) {
-        // TODO: Gửi API mở khóa ở đây
-        alert("Đã gửi yêu cầu mở khóa (giả lập)");
-
-        fetchUsers();
+        try {
+          const result = await unlockUserById(user.id);
+          if (result.success) {
+            alert("✅ " + result.message);
+            fetchUsers();
+          } else {
+            alert("❌ " + result.message);
+          }
+        } catch (err) {
+          console.error("Lỗi mở khóa:", err);
+          alert("❌ Mở khóa thất bại.");
+        }
       }
     } else {
       setBlockingUser(user);
@@ -79,9 +87,9 @@ const ManagerUsers = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="p-6 w-full">
+      <div className="flex-1 p-6 bg-white">
         <h1 className="text-2xl font-bold mb-4">Manage Users</h1>
 
         {loading ? (

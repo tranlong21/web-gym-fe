@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import GirlGymcanvas from './canvas/GirlGymcanvas.jsx';
 import MaleGymcanvas from './canvas/MaleGymcanvas.jsx';
 import Header from './share/Header.jsx';
+import Footer from './share/Footer';
 import { getUserById, updateUserById } from '../services/userService';
 
 export default function Profile() {
@@ -246,6 +247,7 @@ export default function Profile() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }

@@ -74,9 +74,9 @@ const ExercisesAdmin = () => {
   };
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 bg-white shadow-md rounded-lg">
+      <div className="flex-1 bg-white  p-6  shadow-md rounded-lg">
         <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-b">
           <button
             onClick={() => {

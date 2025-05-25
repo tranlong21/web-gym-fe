@@ -116,3 +116,26 @@ export const banUserById = async (id, reason) => {
     return { success: false, message: error.message };
   }
 };
+
+
+export const unlockUserById = async (id) => {
+  try {
+    const response = await fetch(`${API_PREFIX}users/${id}/unlock`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || 'Failed to unlock user');
+    }
+
+    return { success: true, message: 'Mở khóa người dùng thành công!' };
+  } catch (error) {
+    console.error('Lỗi khi mở khóa người dùng:', error);
+    return { success: false, message: error.message };
+  }
+};

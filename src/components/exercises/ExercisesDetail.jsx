@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom"; // Import useParams để lấy mu
 import { Header } from "../share";
 import Muscle from "../muscle"; // Import Muscle component
 import { getExercisesByMuscleGroup } from "../../services/ExerciseService"; // Import service
+import Footer from '../share/Footer';
 
 const ExercisesDetail = () => {
   const { muscleId } = useParams(); // Lấy muscleId từ URL
@@ -27,10 +28,10 @@ const ExercisesDetail = () => {
   }, [muscleId]);
 
   return (
-    <div style={{ height: "100vh", overflow: "auto", display: "flex", flexDirection: "column" }}>
+    <div className="min-h-screen flex flex-col">
       <Header />
-      
-      <div className="flex w-full h-full">
+
+      <div className="flex w-full h-full overflow-y-auto">
         {/* Phần 2/3 bên trái */}
         <div className="w-2/3 p-8 font-sans">
           {exercises.map((exercise, index) => (
@@ -101,20 +102,20 @@ const ExercisesDetail = () => {
 
         {/* Phần 1/3 bên phải */}
         <div
-  className="w-1/3 p-8 bg-[#f1f6fa]"
-  style={{
-    position: "fixed", 
-    right: 0, 
-    top: 0, 
-    height: "100vh", 
-    overflowY: "auto", 
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)", 
-  }}
->
-  <Muscle onMuscleClick={handleMuscleClick} />
-</div>
-
+          className="w-1/3 p-8 bg-[#f1f6fa]"
+          style={{
+            position: "fixed",
+            right: 0,
+            top: 0,
+            height: "100vh",
+            overflowY: "auto",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Muscle onMuscleClick={handleMuscleClick} />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 };

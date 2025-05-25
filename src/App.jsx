@@ -8,6 +8,7 @@ import ExercisesDetail from "./components/exercises/ExercisesDetail.jsx";
 import Shop from "./components/shop/Shop.jsx";
 import Cart from "./components/shop/Cart.jsx";
 import Checkout from "./components/shop/Checkout.jsx";
+import BankTransferInfo from "./components/shop/BankTransferInfo.jsx";
 import Header from "./components/share/Header.jsx";
 import AdminGym from "./page/AdminGym.jsx";
 import ExercisesAdmin from "./components/admin/ExercisesAdmin.jsx"; 
@@ -35,6 +36,7 @@ function App() {
         <Route path="/history" element={<HistoryOrders />} />
         <Route path="/header" element={<Header />} /> 
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/bank-transfer" element={<BankTransferInfo />} />
         <Route path="/admin" element={<AdminGym />} />
         <Route path="/admin/exercises" element={<ExercisesAdmin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />

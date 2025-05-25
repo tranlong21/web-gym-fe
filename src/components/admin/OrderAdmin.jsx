@@ -4,11 +4,19 @@ import ShopService from "../../services/ShopService";
 import AdminSidebar from "../layout _admin/AdminSidebar";
 
 const statusTransitionRules = {
-  "Chưa xử lý": ["Đang xử lý", "Đang giao", "Đã giao", "Hủy đơn hàng"],
-  "Đang xử lý": ["Đang giao", "Đã giao", "Hủy đơn hàng"],
-  "Đang giao": ["Đã giao", "Hủy đơn hàng"],
+  "Chưa xử lý": ["Đang xử lý", "Đang giao", "Đã giao", "Đã hủy"],
+  "Đang xử lý": ["Đang giao", "Đã giao", "Đã hủy"],
+  "Đang giao": ["Đã giao", "Đã hủy"],
   "Đã giao": [],
   "Đã hủy": [],
+};
+
+const statusDisplayMap = {
+  "Chưa xử lý": "Chưa xử lý",
+  "Đang xử lý": "Đang xử lý",
+  "Đang giao": "Đang giao",
+  "Đã giao": "Đã giao",
+  "Đã hủy": "Hủy đơn hàng",
 };
 
 const OrderAdmin = () => {
@@ -61,7 +69,7 @@ const OrderAdmin = () => {
   const formatDate = (dateStr) => new Date(dateStr).toLocaleString("vi-VN");
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <AdminSidebar />
       <div className="p-6 max-w-7xl mx-auto w-full">
         <h1 className="text-2xl font-bold mb-4">Quản lý đơn hàng</h1>
@@ -84,23 +92,21 @@ const OrderAdmin = () => {
                   <td className="p-2 border border-gray-300">{order.full_name}</td>
                   <td className="p-2 border border-gray-300">
                     {order.active === false ? (
-                      <span className="italic text-red-600">Đã hủy đơn hàng</span>
+                      <span className="italic text-red-600">Khách hàng đã hủy</span>
                     ) : (
                       <select
                         className="border rounded px-2 py-1 w-40 text-sm"
                         value={order.status}
                         onChange={(e) => handleStatusChange(order.id, e.target.value)}
                       >
-                        {order.status === "Đã hủy" ? (
-                          <option value="Đã hủy" disabled>Đã hủy đơn hàng</option>
-                        ) : (
-                          <>
-                            <option value={order.status} disabled>{order.status}</option>
-                            {statusTransitionRules[order.status]?.map((status) => (
-                              <option key={status} value={status}>{status}</option>
-                            ))}
-                          </>
-                        )}
+                        <option value={order.status} disabled>
+                          {statusDisplayMap[order.status] || order.status}
+                        </option>
+                        {statusTransitionRules[order.status]?.map((status) => (
+                          <option key={status} value={status}>
+                            {statusDisplayMap[status] || status}
+                          </option>
+                        ))}
                       </select>
                     )}
                   </td>
@@ -141,7 +147,14 @@ const OrderAdmin = () => {
                         })}
                         <li className="text-sm text-gray-500 italic">
                           Ghi chú: {order.note?.trim() || "Không có"}
+                        </li> 
+                        <li className="text-sm text-gray-700">
+                          Phương thức thanh toán: <span className="font-medium text-blue-700">{order.payment_method === "cod" ? "Thanh toán khi nhận hàng" : "Chuyển khoản ngân hàng"}</span>
                         </li>
+                        <li className="text-sm text-gray-700">
+                          Phương thức giao hàng: <span className="font-medium text-blue-700">{order.shipping_method === "express" ? "Giao nhanh (+5.000Vnd)" : "Tiết kiệm"}</span>
+                        </li>
+
                       </ul>
                     </td>
                   </tr>

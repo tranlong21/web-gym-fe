@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6">
+    <footer className="bg-gray-800 text-white py-6 z-10">
       <div className="container mx-auto text-center">
         <p className="text-sm">
           © {new Date().getFullYear()} GymInstructionsPro. All rights reserved.

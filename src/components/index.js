@@ -4,6 +4,7 @@ import LandingPageBan from '../LandingPageBan.jsx';
 import HistoryOrders from '../HistoryOrders.jsx'; 
 import ExercisesDetail from '../exercises/ExercisesDetail';
 import Muscle from '../Muscle';
+import Layout from '../Layout';
 
 export {
   Home,
@@ -11,5 +12,6 @@ export {
   ExercisesDetail,
   Muscle,
   LandingPageBan,
-  HistoryOrders
+  HistoryOrders,
+  Layout
 };
