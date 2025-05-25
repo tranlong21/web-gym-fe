@@ -91,8 +91,10 @@ const OrderAdmin = () => {
                   <td className="p-2 border border-gray-300">{idx + 1 + page * limit}</td>
                   <td className="p-2 border border-gray-300">{order.full_name}</td>
                   <td className="p-2 border border-gray-300">
-                    {order.active === false ? (
-                      <span className="italic text-red-600">Khách hàng đã hủy</span>
+                    {order.active === false || order.status === "Đã hủy" ? (
+                      <span className="italic text-red-600">
+                        {order.active === false ? "Khách hàng đã hủy" : "Bạn đã hủy Đơn"}
+                      </span>
                     ) : (
                       <select
                         className="border rounded px-2 py-1 w-40 text-sm"
@@ -147,7 +149,7 @@ const OrderAdmin = () => {
                         })}
                         <li className="text-sm text-gray-500 italic">
                           Ghi chú: {order.note?.trim() || "Không có"}
-                        </li> 
+                        </li>
                         <li className="text-sm text-gray-700">
                           Phương thức thanh toán: <span className="font-medium text-blue-700">{order.payment_method === "cod" ? "Thanh toán khi nhận hàng" : "Chuyển khoản ngân hàng"}</span>
                         </li>

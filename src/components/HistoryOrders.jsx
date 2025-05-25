@@ -22,11 +22,11 @@ const HistoryOrders = () => {
         const map = {};
 
         for (const order of orderData) {
-          for (const detail of order.orderDetails) {
-            if (!map[detail.id]) {
-              const product = await ShopService.getProductById(detail.id);
+          for (const detail of order.order_details) {
+            if (!map[detail.product_id]) {
+              const product = await ShopService.getProductById(detail.product_id);
               if (product) {
-                map[detail.id] = product;
+                map[detail.product_id] = product;
               }
             }
           }
@@ -85,8 +85,8 @@ const HistoryOrders = () => {
                 <th className="p-2 text-left">Phương thức thanh toán</th>
                 <th className="p-2 text-left">Trạng thái</th>
                 <th className="p-2 text-left">Tổng tiền</th>
-                <th className="p-2 text-center">Chi tiết</th>
                 <th className="p-2 text-center">Hủy</th>
+                <th className="p-2 text-center">Chi tiết</th>
               </tr>
             </thead>
             <tbody>
@@ -95,8 +95,8 @@ const HistoryOrders = () => {
                   <tr className="border-t hover:bg-gray-50 transition">
                     <td className="p-2 text-center">{index + 1}</td>
                     <td className="p-2">
-                      {order.orderDetails
-                        .map((d) => productMap[d.id]?.name || `Sản phẩm #${d.id}`)
+                      {order.order_details
+                        .map((d) => productMap[d.product_id]?.name || `Sản phẩm #${d.product_id}`)
                         .join(", ")}
                     </td>
                     <td className="p-2 capitalize">
@@ -112,14 +112,6 @@ const HistoryOrders = () => {
                       )}
                     </td>
                     <td className="p-2">{order.totalMoney?.toLocaleString()} đ</td>
-                    <td className="p-2 text-center">
-                      <button
-                        className="font-bold text-blue-600 hover:underline"
-                        onClick={() => toggleExpand(order.id)}
-                      >
-                        {expandedOrderId === order.id ? "-" : "+"}
-                      </button>
-                    </td>
                     <td className="p-2 text-center">
                       {order.active && (order.status === "Chưa xử lý" || order.status === "Đang xử lý") ? (
                         <button
@@ -138,6 +130,14 @@ const HistoryOrders = () => {
                         </button>
                       )}
                     </td>
+                    <td className="p-2 text-center">
+                      <button
+                        className="font-bold text-blue-600 hover:underline"
+                        onClick={() => toggleExpand(order.id)}
+                      >
+                        {expandedOrderId === order.id ? "-" : "+"}
+                      </button>
+                    </td>
                   </tr>
 
                   {expandedOrderId === order.id && (
@@ -147,8 +147,8 @@ const HistoryOrders = () => {
                           <li className="text-sm text-gray-700 italic">
                             Ngày đặt: {formatDateTime(order.orderDate)}
                           </li>
-                          {order.orderDetails.map((item, idx) => {
-                            const product = productMap[item.id];
+                          {order.order_details.map((item, idx) => {
+                            const product = productMap[item.product_id];
                             return (
                               <li key={idx} className="flex gap-4 items-start">
                                 {product?.thumbnail && (
@@ -160,7 +160,7 @@ const HistoryOrders = () => {
                                 )}
                                 <div>
                                   <p className="font-semibold text-lg">
-                                    {product?.name || `Sản phẩm #${item.id}`}
+                                    {product?.name || `Sản phẩm #${item.product_id}`}
                                   </p>
                                   <p className="text-sm text-gray-700">
                                     Giá: {item.price.toLocaleString()} đ – Số lượng: {item.numberOfProducts}
@@ -171,6 +171,22 @@ const HistoryOrders = () => {
                           })}
                           <li className="text-sm text-gray-600 italic">
                             Ghi chú: {order.note?.trim() ? order.note : "Không có"}
+                          </li>
+                          <li className="text-sm text-gray-700">
+                            Phương thức thanh toán: {" "}
+                            <span className="font-medium text-blue-700">
+                              {order.paymentMethod === "cod"
+                                ? "Thanh toán khi nhận hàng"
+                                : "Chuyển khoản ngân hàng"}
+                            </span>
+                          </li>
+                          <li className="text-sm text-gray-700">
+                            Phương thức giao hàng: {" "}
+                            <span className="font-medium text-blue-700">
+                              {order.shippingMethod === "express"
+                                ? "Giao nhanh (+5.000Vnd)"
+                                : "Tiết kiệm"}
+                            </span>
                           </li>
                         </ul>
                       </td>

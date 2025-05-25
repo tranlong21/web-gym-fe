@@ -4,23 +4,23 @@ const API_PREFIX = "http://localhost:8091/api/v1/";
 
 const ShopService = {
   getProductById: async (id) => {
-  try {
-    const res = await axios.get(`${API_PREFIX}products/${id}`);
-    const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
+    try {
+      const res = await axios.get(`${API_PREFIX}products/${id}`);
+      const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
 
-    return {
-      id: res.data.id,
-      name: res.data.name,
-      price: res.data.price,
-      thumbnail: res.data.thumbnail ? BASE_IMAGE_URL + res.data.thumbnail : null,
-      description: res.data.description,
-      category_id: res.data.category_id,
-    };
-  } catch (error) {
-    console.error(`❌ GET /products/${id} failed:`, error.response?.data || error.message);
-    return null;
-  }
-},
+      return {
+        id: res.data.id,
+        name: res.data.name,
+        price: res.data.price,
+        thumbnail: res.data.thumbnail ? BASE_IMAGE_URL + res.data.thumbnail : null,
+        description: res.data.description,
+        category_id: res.data.category_id,
+      };
+    } catch (error) {
+      console.error(`❌ GET /products/${id} failed:`, error.response?.data || error.message);
+      return null;
+    }
+  },
 
   getProducts: async (page = null, limit = null) => {
     const params = {};

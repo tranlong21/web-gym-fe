@@ -28,7 +28,7 @@ const ShopAdmin = () => {
   };
 
   useEffect(() => {
-    setData([]); // 🧹 Clear data mỗi lần đổi page
+    setData([]); 
     fetchProducts();
   }, [page]);
 

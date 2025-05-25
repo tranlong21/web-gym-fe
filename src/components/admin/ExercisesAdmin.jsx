@@ -18,7 +18,7 @@ const ExercisesAdmin = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const limit = 5;
+  const limit = 4;
 
   const fetchExercises = async () => {
     setLoading(true);

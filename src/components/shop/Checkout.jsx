@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getUserById } from "../../services/userService";
 import CartService from "../../services/cartService";
+import { placeOrder } from "../../services/orderService"; // ✅ Đúng
 import { CartContext } from "./CartContext";
 import { useNavigate } from "react-router-dom";
 
@@ -50,23 +51,23 @@ const Checkout = () => {
       email: userData.email,
       phone: userData.phone,
       address: userData.address,
-      note,
+      note: note || "",
       total_money: totalMoney,
       shipping_method: shippingMethod,
       payment_method: paymentMethod,
       cart_items: items,
     };
 
-    // Nếu là chuyển khoản thì CHƯA gọi API
+    console.log("📦 Dữ liệu gửi đi:", payload);
+
     if (paymentMethod === "bank") {
       navigate("/bank-transfer", {
         state: { orderData: payload },
       });
     } else {
-      // Nếu COD thì gọi luôn
       try {
         const selectedIds = checkoutItems.map((item) => item.product.id);
-        await import("../../services/orderService").then(({ placeOrder }) => placeOrder(payload));
+        await placeOrder(payload);
         for (const pid of selectedIds) {
           await CartService.removeItem(user.id, pid);
         }
@@ -75,8 +76,13 @@ const Checkout = () => {
         alert("✅ Đặt hàng thành công!");
         navigate("/shop");
       } catch (err) {
-        console.error("Lỗi đặt hàng:", err);
-        alert("❌ Đặt hàng thất bại!");
+        const message =
+          err.response?.data?.message ||
+          err.response?.data ||
+          err.message ||
+          "Đặt hàng thất bại!";
+        console.error("❌ Lỗi đặt hàng:", err);
+        alert("❌ Đặt hàng thất bại!\n" + message);
       }
     }
   };
@@ -126,7 +132,7 @@ const Checkout = () => {
           className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           <option value="standard">Tiết kiệm (Miễn phí)</option>
-          <option value="express">Giao nhanh (+5.000Vnđ)</option>
+          <option value="express">Giao nhanh (+5.000đ)</option>
         </select>
       </div>
 

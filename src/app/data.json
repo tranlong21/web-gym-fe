@@ -1,0 +1,8 @@
+{
+    "name": "Updated Product Name Example",
+    "price": 250000.0,
+    "description": "This is an updated description for the product example.",
+    "category_id": 6,
+    "thumbnail": "",
+    "deleted_image_ids": [] 
+}
