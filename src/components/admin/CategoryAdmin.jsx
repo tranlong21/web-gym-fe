@@ -18,7 +18,7 @@ const CategoryAdmin = () => {
     e.preventDefault();
     try {
       if (editingId) {
-        await CategoryService.updateCategory(editingId, name);
+        await CategoryService.updateCategory(editingId, { name });
       } else {
         await CategoryService.createCategory(name);
       }

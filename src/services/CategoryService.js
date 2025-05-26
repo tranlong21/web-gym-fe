@@ -3,10 +3,10 @@ import axios from "axios";
 const API_PREFIX = "http://localhost:8091/api/v1/";
 
 const CategoryService = {
-  getCategories: async (page = 1, limit = 12) => {
+  getCategories: async (page = 1, limit = 100) => {
     try {
       const response = await axios.get(`${API_PREFIX}categories`, {
-        params: { page, limit }
+        params: { page, limit },
       });
       return response.data;
     } catch (error) {
@@ -25,9 +25,9 @@ const CategoryService = {
     }
   },
 
-  updateCategory: async (id, name) => {
+  updateCategory: async (id, { name }) => {
     try {
-      const res = await axios.put(`${API_PREFIX}categories/${id}`, { GroupName: name });
+      const res = await axios.put(`${API_PREFIX}categories/${id}`, { name });
       return res.data;
     } catch (error) {
       console.error("❌ Lỗi khi cập nhật danh mục:", error.response?.data || error.message);
@@ -43,7 +43,7 @@ const CategoryService = {
       console.error("❌ Lỗi khi xóa danh mục:", error.response?.data || error.message);
       throw error;
     }
-  }
+  },
 };
 
 export default CategoryService;
