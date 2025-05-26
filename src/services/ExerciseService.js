@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_PREFIX = "http://localhost:8091/api/v1/";
+export const API_PREFIX = "http://localhost:8091/api/v1/";
 
 export const getExercisesByMuscleGroup = async (muscleGroupId) => {
   try {
@@ -44,32 +44,105 @@ export const getExercises = async (page = 0, limit = 6) => {
   }
 };
 
-export const createExercise = async (data) => {
-  const { video_file, id, exercise_id, ...info } = data; // loại bỏ id trước khi POST
-  console.log("📝 [POST] /exercises", info);
-  const res = await axios.post(`${API_PREFIX}exercises`, info);
-  const newId = res.data.id ?? res.data.exercise_id;
-
-  if (video_file instanceof File) {
-    const formData = new FormData();
-    formData.append("file", video_file);
-    console.log("📤 [POST] /exercises/uploads/" + newId, video_file.name);
-    await axios.post(`${API_PREFIX}exercises/uploads/${newId}`, formData);
+export const getExerciseById = async (id) => {
+  try {
+    console.log("📥 [GET] /exercises/" + id);
+    const response = await fetch(`${API_PREFIX}exercises/${id}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch exercise by id");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("❌ Error fetching exercise by id:", error);
+    throw error;
   }
 };
+
+
+
+
+
+export const uploadExerciseVideo = async (id, video_file) => {
+  if (video_file instanceof File && id) {
+    const formData = new FormData();
+    formData.append("file", video_file);
+    console.log("📤 [POST] /exercises/upload-video/" + id, video_file.name);
+    await axios.post(`${API_PREFIX}exercises/upload-video/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+  }
+};
+
+export const createExercise = async (data) => {
+  const {
+    video_file,
+    id,
+    exercise_id,
+    created_at,
+    updated_at,
+    ...info
+  } = data;
+
+  const payload = {
+    ...info,
+    recommended_sets: Number(info.recommended_sets),
+    recommended_reps: Number(info.recommended_reps),
+    rest_between_sets: Number(info.rest_between_sets),
+    muscle_group_id: Number(info.muscle_group_id),
+    technique_description: Array.isArray(info.technique_description)
+      ? info.technique_description.join(". ") + "."
+      : info.technique_description,
+  };
+
+  console.log("📤 Payload gửi đi:", payload);
+
+  const res = await axios.post(`${API_PREFIX}exercises`, payload, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+  console.log("📥 Response từ server:", res.data);
+
+  const newId = res.data.id ?? res.data.exercise_id;
+  return newId;
+};
+
 
 export const updateExercise = async (id, data) => {
-  const { video_file, ...info } = data;
-  console.log("✏️ [PUT] /exercises/" + id, info);
-  await axios.put(`${API_PREFIX}exercises/${id}`, info);
+  const {
+    video_file,
+    exercise_id,
+    created_at,
+    updated_at,
+    id: _,
+    ...info
+  } = data;
 
-  if (video_file instanceof File) {
+  const payload = {
+    ...info,
+    recommended_sets: Number(info.recommended_sets),
+    recommended_reps: Number(info.recommended_reps),
+    rest_between_sets: Number(info.rest_between_sets),
+    muscle_group_id: Number(info.muscle_group_id),
+    technique_description: Array.isArray(info.technique_description)
+      ? info.technique_description.join(". ") + "."
+      : info.technique_description,
+  };
+
+  console.log("✏️ [PUT] /exercises/" + id, payload);
+
+  await axios.put(`${API_PREFIX}exercises/${id}`, payload, {
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!data.video_url && video_file instanceof File) {
     const formData = new FormData();
     formData.append("file", video_file);
-    console.log("📤 [POST] /exercises/uploads/" + id, video_file.name);
-    await axios.post(`${API_PREFIX}exercises/uploads/${id}`, formData);
+    await axios.post(`${API_PREFIX}exercises/upload-video/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   }
 };
+
 
 export const deleteExercise = async (id) => {
   console.log("🗑️ [DELETE] /exercises/" + id);

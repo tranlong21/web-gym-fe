@@ -4,12 +4,14 @@ import AdminSidebar from "../layout _admin/AdminSidebar";
 import ExercisesFormModal from "../share/modals/ExercisesFormModal";
 import {
   getExercises,
-  createExercise,
-  updateExercise,
   deleteExercise,
+  createExercise,
+  updateExercise,  
+  uploadExerciseVideo,
+  API_PREFIX
 } from "../../services/ExerciseService";
 
-const ExercisesAdmin = () => {
+const Exercises = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -51,20 +53,6 @@ const ExercisesAdmin = () => {
     }
   };
 
-  const handleSubmit = async (exercise) => {
-    try {
-      if (editingItem) {
-        await updateExercise(editingItem.id, exercise);
-      } else {
-        await createExercise(exercise);
-      }
-      await fetchExercises();
-    } catch (error) {
-      console.error("Error submitting exercise:", error);
-    }
-    setEditingItem(null);
-  };
-
   const handlePageChange = (direction) => {
     if (direction === "next" && page < totalPages - 1) {
       setPage(page + 1);
@@ -72,7 +60,6 @@ const ExercisesAdmin = () => {
       setPage(page - 1);
     }
   };
-
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
@@ -119,7 +106,7 @@ const ExercisesAdmin = () => {
                   <th className="px-4 py-3 border border-gray-300">% Target</th>
                   <th className="px-4 py-3 border border-gray-300">Sets</th>
                   <th className="px-4 py-3 border border-gray-300">Reps</th>
-                  <th className="px-4 py-3 ">Rest</th>
+                  <th className="px-4 py-3 border border-gray-300">Rest</th>
                   <th className="px-4 py-3 text-center border border-gray-300">Video</th>
                   <th className="px-4 py-3 border border-gray-300">Actions</th>
                 </tr>
@@ -127,9 +114,7 @@ const ExercisesAdmin = () => {
               <tbody>
                 {data
                   .filter((item) =>
-                    item.exercise_name
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase())
+                    item.exercise_name.toLowerCase().includes(searchTerm.toLowerCase())
                   )
                   .map((item, index) => (
                     <tr key={item.id || index} className="border-b hover:bg-gray-50">
@@ -137,7 +122,17 @@ const ExercisesAdmin = () => {
                       <td className="px-4 py-3 border border-gray-300">{item.exercise_name}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.muscle_group_id}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.muscle_section}</td>
-                      <td className="px-4 py-3 border border-gray-300">{item.technique_description}</td>
+                      <td>
+                        {(() => {
+                          try {
+                            const steps = JSON.parse(item.technique_description);
+                            return steps.join(" | ");
+                          } catch {
+                            return item.technique_description;
+                          }
+                        })()
+                        }
+                      </td>
                       <td className="px-4 py-3 border border-gray-300">{item.equipment_required}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.target_muscle_percentage}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.recommended_sets}</td>
@@ -146,7 +141,7 @@ const ExercisesAdmin = () => {
                       <td className="px-4 py-3 text-center border border-gray-300">
                         {item.video_url ? (
                           <a
-                            href={item.video_url}
+                            href={`${API_PREFIX}exercises/videos/${item.video_url}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
@@ -157,6 +152,7 @@ const ExercisesAdmin = () => {
                           <span className="text-gray-400">NULL</span>
                         )}
                       </td>
+
                       <td className="px-4 py-3 flex gap-3">
                         <button
                           onClick={() => {
@@ -167,6 +163,7 @@ const ExercisesAdmin = () => {
                         >
                           <FaEdit />
                         </button>
+
                         <button
                           onClick={() => handleDelete(item.id)}
                           className="text-red-500 hover:text-red-700"
@@ -181,14 +178,12 @@ const ExercisesAdmin = () => {
           </div>
         )}
 
-        {/* Pagination */}
         <div className="flex justify-center items-center mt-4 gap-2">
           <button
             onClick={() => handlePageChange("prev")}
             disabled={page === 0}
-            className={`px-4 py-2 rounded ${
-              page === 0 ? "bg-gray-300" : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
+            className={`px-4 py-2 rounded ${page === 0 ? "bg-gray-300" : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
           >
             Previous
           </button>
@@ -205,9 +200,8 @@ const ExercisesAdmin = () => {
                 <button
                   key={`page-${i}`}
                   onClick={() => setPage(i)}
-                  className={`px-3 py-1 rounded ${
-                    page === i ? "bg-blue-700 text-white" : "bg-gray-200 text-black"
-                  }`}
+                  className={`px-3 py-1 rounded ${page === i ? "bg-blue-700 text-white" : "bg-gray-200 text-black"
+                    }`}
                 >
                   {i + 1}
                 </button>
@@ -219,27 +213,50 @@ const ExercisesAdmin = () => {
           <button
             onClick={() => handlePageChange("next")}
             disabled={page === totalPages - 1}
-            className={`px-4 py-2 rounded ${
-              page === totalPages - 1 ? "bg-gray-300" : "bg-blue-600 text-white hover:bg-blue-700"
-            }`}
+            className={`px-4 py-2 rounded ${page === totalPages - 1 ? "bg-gray-300" : "bg-blue-600 text-white hover:bg-blue-700"
+              }`}
           >
             Next
           </button>
         </div>
 
-        {/* Modal */}
         <ExercisesFormModal
           visible={modalOpen}
           onClose={() => {
             setModalOpen(false);
             setEditingItem(null);
+            fetchExercises(); // load lại danh sách sau khi thêm/sửa
           }}
-          onSubmit={handleSubmit}
+          onSubmit={async (data) => {
+            try {
+              if (editingItem && editingItem.id) {
+                // 👉 Đúng là cập nhật
+                await updateExercise(editingItem.id, data);
+
+                if (data.video_file) {
+                  await uploadExerciseVideo(editingItem.id, data.video_file);
+                }
+              } else {
+                // 👉 Tạo mới
+                const newId = await createExercise(data);
+                if (data.video_file) {
+                  await uploadExerciseVideo(newId, data.video_file);
+                }
+              }
+
+              fetchExercises();
+            } catch (err) {
+              console.error("❌ Submit failed:", err);
+              alert("Lỗi khi lưu bài tập.");
+            }
+          }}
           initialData={editingItem}
         />
+
+
       </div>
     </div>
   );
 };
 
-export default ExercisesAdmin;
+export default Exercises;

@@ -4,7 +4,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AuthPage from "./components/auth/AuthPage.jsx";
 import Home from "./components/Home.jsx";
 import Profile from "./components/Profile.jsx";
-import ExercisesDetail from "./components/exercises/ExercisesDetail.jsx";
+import Exercises from "./components/exercises/Exercises.jsx";
+import ExerciseDetail from "./components/exercises/ExercisesDetail.jsx";
 import Shop from "./components/shop/Shop.jsx";
 import Cart from "./components/shop/Cart.jsx";
 import Checkout from "./components/shop/Checkout.jsx";
@@ -27,8 +28,9 @@ function App() {
       <Routes>
         <Route path="/" element={<AuthPage />} /> 
         <Route path="/profile" element={<Profile />} />
-        <Route path="/exercises" element={<ExercisesDetail />} />
-        <Route path="/exercises/:muscleId" element={<ExercisesDetail />} />
+        <Route path="/exercises" element={<Exercises />} />
+        <Route path="/exercise-detail/:id" element={<ExerciseDetail />} />
+        <Route path="/exercises/:muscleId" element={<Exercises />} />
         <Route path="/muscle" element={<Muscle />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/cart" element={<Cart />} />
