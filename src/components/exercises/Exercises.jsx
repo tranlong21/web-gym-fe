@@ -12,6 +12,9 @@ const Exercises = () => {
 
   const handleMuscleClick = async (muscleId) => {
     setSelectedMuscleId(muscleId);
+
+    navigate(`/exercises/${muscleId}`);
+
     try {
       const data = await getExercisesByMuscleGroup(muscleId);
       setExercises(data);
@@ -33,27 +36,27 @@ const Exercises = () => {
           {/* 2/3 bên trái */}
           <div className="w-2/3 p-8 font-sans">
             {Array.isArray(exercises) && exercises.map((exercise, index) => (
-  <div key={index} style={{ backgroundColor: "#f9f9f9", borderRadius: "10px", padding: "1.5rem", marginBottom: "2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#1e3a8a", padding: "1rem", borderRadius: "8px 8px 0 0", color: "white" }}>
-      <h2 style={{ margin: 0 }}>{exercise.exercise_name || "Không có tên"}</h2>
-      <span style={{ backgroundColor: "#facc15", color: "#000", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>
-        {exercise.muscle_section || "Không rõ vùng cơ"}
-      </span>
-    </div>
-    <div style={{ marginTop: "1rem" }}>
-      <p><strong>Mục tiêu cơ bắp:</strong> {exercise.target_muscle_percentage || "..."}</p>
-    </div>
-    
-    <div className="mt-3">
-      <button
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
-        onClick={() => navigate(`/exercise-detail/${exercise.exercise_id}`)}
-      >
-        Xem chi tiết
-      </button>
-    </div>
-  </div>
-))}
+              <div key={index} style={{ backgroundColor: "#f9f9f9", borderRadius: "10px", padding: "1.5rem", marginBottom: "2rem", boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#1e3a8a", padding: "1rem", borderRadius: "8px 8px 0 0", color: "white" }}>
+                  <h2 style={{ margin: 0 }}>{exercise.exercise_name || "Không có tên"}</h2>
+                  <span style={{ backgroundColor: "#facc15", color: "#000", padding: "4px 8px", borderRadius: "6px", fontWeight: "bold" }}>
+                    {exercise.muscle_section || "Không rõ vùng cơ"}
+                  </span>
+                </div>
+                <div style={{ marginTop: "1rem" }}>
+                  <p><strong>Mục tiêu cơ bắp:</strong> {exercise.target_muscle_percentage || "..."}</p>
+                </div>
+
+                <div className="mt-3">
+                  <button
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+                    onClick={() => navigate(`/exercise-detail/${exercise.exercise_id}`)}
+                  >
+                    Xem chi tiết
+                  </button>
+                </div>
+              </div>
+            ))}
 
           </div>
 
