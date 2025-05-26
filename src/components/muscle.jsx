@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Import useLocation
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { musclePathsFront, musclePathsBack } from "../app/data";
 
 const Muscle = ({ onMuscleClick }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // Lấy state từ navigate
+  const location = useLocation(); 
   const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
-    // Nếu có state từ navigate, đặt selectedId
     if (location.state?.selectedId) {
       setSelectedId(location.state.selectedId);
     }
   }, [location.state]);
 
   const handleClick = (muscleLabel, muscleId) => {
-    setSelectedId(muscleId); // Cập nhật id phần cơ được chọn
+    setSelectedId(muscleId); 
     if (onMuscleClick) {
       onMuscleClick(muscleId);
     } else {
-      navigate(`/exercises/${muscleId}`, { state: { selectedId: muscleId } }); // Truyền selectedId qua state
+      navigate(`/exercises/${muscleId}`, { state: { selectedId: muscleId } }); 
     }
   };
 

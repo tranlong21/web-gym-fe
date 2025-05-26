@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // Import useParams để lấy muscleId từ URL
-import Muscle from "../muscle"; // Import Muscle component
+import Muscle from "../Muscle"; // Import Muscle component
 import { getExercisesByMuscleGroup } from "../../services/ExerciseService"; // Import service
 import Layout from "../LayOut";
 

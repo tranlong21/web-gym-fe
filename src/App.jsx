@@ -17,7 +17,7 @@ import ShopAdmin from "./components/admin/ShopAdmin.jsx";
 import ManagerUsers from "./components/admin/ManagerUsers.jsx";
 import OrderAdmin from "./components/admin/OrderAdmin.jsx";
 import CategoryAdmin from "./components/admin/CategoryAdmin.jsx";
-import Muscle from "./components/muscle.jsx"; 
+import Muscle from "./components/Muscle.jsx"; 
 import LandingPageBan from "./components/LandingPageBan.jsx";
 import HistoryOrders from "./components/HistoryOrders.jsx";
 
