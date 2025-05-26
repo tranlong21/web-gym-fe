@@ -6,7 +6,7 @@ import {
   getExercises,
   deleteExercise,
   createExercise,
-  updateExercise,  
+  updateExercise,
   uploadExerciseVideo,
   API_PREFIX
 } from "../../services/ExerciseService";
@@ -149,10 +149,31 @@ const Exercises = () => {
                             <FaVideo />
                           </a>
                         ) : (
-                          <span className="text-gray-400">NULL</span>
+                          <>
+                            <label className="cursor-pointer text-green-600 hover:text-green-800">
+                              <FaPlus />
+                              <input
+                                type="file"
+                                accept="video/*"
+                                className="hidden"
+                                onChange={async (e) => {
+                                  const file = e.target.files[0];
+                                  if (file) {
+                                    try {
+                                      await uploadExerciseVideo(item.id, file);
+                                      alert("Tải video thành công!");
+                                      fetchExercises(); // cập nhật lại giao diện
+                                    } catch (err) {
+                                      console.error("❌ Upload lỗi:", err);
+                                      alert("Lỗi khi tải video.");
+                                    }
+                                  }
+                                }}
+                              />
+                            </label>
+                          </>
                         )}
                       </td>
-
                       <td className="px-4 py-3 flex gap-3">
                         <button
                           onClick={() => {

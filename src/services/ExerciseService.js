@@ -59,9 +59,6 @@ export const getExerciseById = async (id) => {
 };
 
 
-
-
-
 export const uploadExerciseVideo = async (id, video_file) => {
   if (video_file instanceof File && id) {
     const formData = new FormData();
@@ -75,73 +72,56 @@ export const uploadExerciseVideo = async (id, video_file) => {
 
 export const createExercise = async (data) => {
   const {
-    video_file,
-    id,
-    exercise_id,
-    created_at,
-    updated_at,
-    ...info
+    technique_description,
+    ...rest
   } = data;
 
   const payload = {
-    ...info,
-    recommended_sets: Number(info.recommended_sets),
-    recommended_reps: Number(info.recommended_reps),
-    rest_between_sets: Number(info.rest_between_sets),
-    muscle_group_id: Number(info.muscle_group_id),
-    technique_description: Array.isArray(info.technique_description)
-      ? info.technique_description.join(". ") + "."
-      : info.technique_description,
+    ...rest,
+    recommended_sets: Number(data.recommended_sets),
+    recommended_reps: Number(data.recommended_reps),
+    rest_between_sets: Number(data.rest_between_sets),
+    muscle_group_id: Number(data.muscle_group_id),
+    technique_description: Array.isArray(technique_description)
+      ? technique_description.join(". ") + "."
+      : technique_description,
   };
 
-  console.log("📤 Payload gửi đi:", payload);
+  console.log("📤 Tạo mới - Payload gửi đi:", payload);
 
   const res = await axios.post(`${API_PREFIX}exercises`, payload, {
     headers: { "Content-Type": "application/json" },
   });
 
-  console.log("📥 Response từ server:", res.data);
-
   const newId = res.data.id ?? res.data.exercise_id;
   return newId;
 };
 
-
 export const updateExercise = async (id, data) => {
   const {
-    video_file,
-    exercise_id,
-    created_at,
-    updated_at,
-    id: _,
-    ...info
+    technique_description,
+    ...rest
   } = data;
 
   const payload = {
-    ...info,
-    recommended_sets: Number(info.recommended_sets),
-    recommended_reps: Number(info.recommended_reps),
-    rest_between_sets: Number(info.rest_between_sets),
-    muscle_group_id: Number(info.muscle_group_id),
-    technique_description: Array.isArray(info.technique_description)
-      ? info.technique_description.join(". ") + "."
-      : info.technique_description,
+    ...rest,
+    recommended_sets: Number(data.recommended_sets),
+    recommended_reps: Number(data.recommended_reps),
+    rest_between_sets: Number(data.rest_between_sets),
+    muscle_group_id: Number(data.muscle_group_id),
+    technique_description: Array.isArray(technique_description)
+      ? technique_description.join(". ") + "."
+      : technique_description,
   };
 
-  console.log("✏️ [PUT] /exercises/" + id, payload);
+  console.log("🔄 Cập nhật - Payload gửi đi:", payload);
 
   await axios.put(`${API_PREFIX}exercises/${id}`, payload, {
     headers: { "Content-Type": "application/json" },
   });
-
-  if (!data.video_url && video_file instanceof File) {
-    const formData = new FormData();
-    formData.append("file", video_file);
-    await axios.post(`${API_PREFIX}exercises/upload-video/${id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-  }
 };
+
+
 
 
 export const deleteExercise = async (id) => {
