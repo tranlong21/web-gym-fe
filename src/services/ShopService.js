@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const API_PREFIX = "http://localhost:8091/api/v1/";
+const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
 
 const ShopService = {
   getProductById: async (id) => {
     try {
       const res = await axios.get(`${API_PREFIX}products/${id}`);
-      const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
 
       return {
         id: res.data.id,
@@ -15,6 +15,14 @@ const ShopService = {
         thumbnail: res.data.thumbnail ? BASE_IMAGE_URL + res.data.thumbnail : null,
         description: res.data.description,
         category_id: res.data.category_id,
+        images: (res.data.product_images || []).map((img) => {
+          const imagePath = img.image_url || img.imageUrl || "";
+          return {
+            id: img.id,
+            path: imagePath,
+            url: BASE_IMAGE_URL + imagePath,
+          };
+        }),
       };
     } catch (error) {
       console.error(`❌ GET /products/${id} failed:`, error.response?.data || error.message);
@@ -22,16 +30,15 @@ const ShopService = {
     }
   },
 
-  getProducts: async (page = null, limit = null) => {
+  getProducts: async (page = null, limit = null, categoryId = null) => {
     const params = {};
     if (page !== null) params.page = page;
     if (limit !== null) params.limit = limit;
-
+    if (categoryId !== null) params.category_id = categoryId;
     try {
-      // console.log("📥 [GET] /products", params);
       const res = await axios.get(`${API_PREFIX}products`, { params });
 
-      const BASE_IMAGE_URL = `${API_PREFIX}products/images/`;
+      console.log("📦 Dữ liệu từ API /products:", res.data);
 
       const products = res.data.products.map((p) => ({
         id: p.id,
@@ -40,6 +47,14 @@ const ShopService = {
         thumbnail: p.thumbnail ? BASE_IMAGE_URL + p.thumbnail : null,
         description: p.description,
         category_id: p.category_id,
+        images: (p.product_images || []).map((img) => {
+          const imagePath = img.image_url || img.imageUrl || "";
+          return {
+            id: img.id,
+            path: imagePath,
+            url: BASE_IMAGE_URL + imagePath,
+          };
+        }),
       }));
 
       return { products, totalPages: res.data.totalPages };
@@ -49,28 +64,16 @@ const ShopService = {
     }
   },
 
-
-  createProduct: async (data) => {
-    const { thumbnail, ...info } = data;
-    const res = await axios.post(`${API_PREFIX}products`, info);
-    const id = res.data.id;
-
-    if (thumbnail instanceof File) {
-      const formData = new FormData();
-      formData.append("file", thumbnail);
-      await axios.post(`${API_PREFIX}products/uploads/${id}`, formData);
-    }
+  createProduct: async (form) => {
+    await axios.post(`${API_PREFIX}products`, form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   },
 
-  updateProduct: async (id, data) => {
-    const { thumbnail, ...info } = data;
-    await axios.put(`${API_PREFIX}products/${id}`, info);
-
-    if (thumbnail instanceof File) {
-      const formData = new FormData();
-      formData.append("file", thumbnail);
-      await axios.post(`${API_PREFIX}products/uploads/${id}`, formData);
-    }
+  updateProduct: async (id, form) => {
+    await axios.put(`${API_PREFIX}products/${id}`, form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
   },
 
   deleteProduct: async (id) => {

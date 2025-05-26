@@ -6,6 +6,7 @@ import {
   FaSignOutAlt,
   FaRunning,
   FaClipboardList,
+  FaTags
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -15,6 +16,7 @@ const navItems = [
   { name: "Users", icon: <FaUsers />, path: "/admin/users" },
   { name: "Exercises", icon: <FaRunning />, path: "/admin/exercises" },
   { name: "Orders", icon: <FaClipboardList />, path: "/admin/orders" },
+  { name: "Categories", icon: <FaTags />, path: "/admin/categories" }
 ];
 
 const AdminSidebar = () => {

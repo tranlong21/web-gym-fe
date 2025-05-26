@@ -16,6 +16,7 @@ import AdminDashboard from "./components/layout _admin/AdminDashboard.jsx";
 import ShopAdmin from "./components/admin/ShopAdmin.jsx";
 import ManagerUsers from "./components/admin/ManagerUsers.jsx";
 import OrderAdmin from "./components/admin/OrderAdmin.jsx";
+import CategoryAdmin from "./components/admin/CategoryAdmin.jsx";
 import Muscle from "./components/muscle.jsx"; 
 import LandingPageBan from "./components/LandingPageBan.jsx";
 import HistoryOrders from "./components/HistoryOrders.jsx";
@@ -43,6 +44,7 @@ function App() {
         <Route path="/admin/shop" element={<ShopAdmin />} /> 
         <Route path="/admin/users" element={<ManagerUsers />} />
         <Route path="/admin/orders" element={<OrderAdmin />} />
+        <Route path="/admin/categories" element={<CategoryAdmin />} />
       </Routes>
     </BrowserRouter>
   );

@@ -13,22 +13,24 @@ const ShopAdmin = () => {
   const [page, setPage] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const limit = 4; // Số sản phẩm trên mỗi trang
+  const limit = 4;
+
   const fetchProducts = async () => {
     setLoading(true);
     try {
       const { products, totalPages } = await ShopService.getProducts(page, limit);
+      console.log("📦 Sản phẩm lấy được:", products);
       setData(products);
       setTotalPages(totalPages);
     } catch (error) {
-      console.error("Error fetching products:", error);
+      console.error("❌ Lỗi fetchProducts:", error);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    setData([]); 
+    setData([]);
     fetchProducts();
   }, [page]);
 
@@ -44,24 +46,6 @@ const ShopAdmin = () => {
     }
   };
 
-
-  const handleSubmit = async (item) => {
-    try {
-      if (editingItem) {
-        console.log("🛠 Sửa sản phẩm ID:", editingItem.id); // THÊM DÒNG NÀY
-        await ShopService.updateProduct(editingItem.id, item);
-      } else {
-        await ShopService.createProduct(item);
-      }
-      await fetchProducts();
-    } catch (error) {
-      console.error("Error submitting product:", error);
-    }
-    setEditingItem(null);
-  };
-
-
-
   const handlePageChange = (direction) => {
     if (direction === "next" && page < totalPages - 1) {
       setPage(page + 1);
@@ -73,8 +57,7 @@ const ShopAdmin = () => {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 bg-white  p-6  shadow-md rounded-lg">
-        {/* Header */}
+      <div className="flex-1 bg-white p-6 shadow-md rounded-lg">
         <div className="flex items-center justify-between px-4 py-3 bg-gray-100 border-b">
           <button
             onClick={() => {
@@ -100,7 +83,6 @@ const ShopAdmin = () => {
           </div>
         </div>
 
-        {/* Loading */}
         {loading ? (
           <div className="flex justify-center items-center py-10 text-gray-500 text-lg">
             Loading...
@@ -114,6 +96,7 @@ const ShopAdmin = () => {
                   <th className="px-4 py-3 border border-gray-300">Name</th>
                   <th className="px-4 py-3 border border-gray-300">Price</th>
                   <th className="px-4 py-3 border border-gray-300">Thumbnail</th>
+                  <th className="px-4 py-3 border border-gray-300">Images</th>
                   <th className="px-4 py-3 border border-gray-300">Description</th>
                   <th className="px-4 py-3 border border-gray-300">Category</th>
                   <th className="px-4 py-3 border border-gray-300">Actions</th>
@@ -135,6 +118,22 @@ const ShopAdmin = () => {
                           alt={item.name}
                           className="w-16 h-16 object-cover rounded"
                         />
+                      </td>
+                      <td className="px-4 py-3 border border-gray-300">
+                        <div className="flex gap-2 flex-wrap">
+                          {console.log("🖼️ item.images:", item.images)}
+                          {item.images?.map((img, idx) => {
+                            console.log("🔗 Hiển thị ảnh:", img.url || img.path);
+                            return (
+                              <img
+                                key={idx}
+                                src={img.url || img.path}
+                                alt="img"
+                                className="w-10 h-10 object-cover rounded border"
+                              />
+                            );
+                          })}
+                        </div>
                       </td>
                       <td className="px-4 py-3 border border-gray-300">{item.description}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.category_id}</td>
@@ -162,7 +161,6 @@ const ShopAdmin = () => {
           </div>
         )}
 
-        {/* Pagination */}
         <div className="flex justify-center items-center mt-4 gap-2">
           <button
             onClick={() => handlePageChange("prev")}
@@ -173,7 +171,6 @@ const ShopAdmin = () => {
             Previous
           </button>
 
-          {/* Page Numbers */}
           {Array.from({ length: Math.min(totalPages, 5) }, (_, idx) => {
             const pageNum = Math.max(0, page - 2) + idx;
             if (pageNum >= totalPages) return null;
@@ -190,7 +187,6 @@ const ShopAdmin = () => {
             );
           })}
 
-
           <button
             onClick={() => handlePageChange("next")}
             disabled={page === totalPages - 1}
@@ -201,15 +197,14 @@ const ShopAdmin = () => {
           </button>
         </div>
 
-        {/* Modal Thêm/Sửa */}
         <ShopFormModal
-          visible={modalOpen}
+          isOpen={modalOpen}
           onClose={() => {
             setModalOpen(false);
             setEditingItem(null);
           }}
-          onSubmit={handleSubmit}
-          initialData={editingItem}
+          onSuccess={fetchProducts}
+          editingProduct={editingItem}
         />
       </div>
     </div>

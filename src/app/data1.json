@@ -1,0 +1,7 @@
+
+{
+    "name": "New Product Name",
+    "price": 500000.0,
+    "description": "Description for the new product.",
+    "category_id": 1
+}
