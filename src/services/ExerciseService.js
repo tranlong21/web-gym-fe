@@ -35,7 +35,9 @@ export const getExercises = async (page = 0, limit = 6) => {
       recommended_sets: exercise.recommended_sets,
       recommended_reps: exercise.recommended_reps,
       rest_between_sets: exercise.rest_between_sets,
-      video_url: exercise.video_url,
+      id: exercise.exercise_id,
+      video_url: exercise.videos?.[0]?.video_url || null,
+      videos: exercise.videos || [],
     }));
     return { exercises, totalPages: data.totalPages };
   } catch (error) {
@@ -45,19 +47,15 @@ export const getExercises = async (page = 0, limit = 6) => {
 };
 
 export const getExerciseById = async (id) => {
-  try {
-    console.log("📥 [GET] /exercises/" + id);
-    const response = await fetch(`${API_PREFIX}exercises/${id}`);
-    if (!response.ok) {
-      throw new Error("Failed to fetch exercise by id");
-    }
-    return await response.json();
-  } catch (error) {
-    console.error("❌ Error fetching exercise by id:", error);
-    throw error;
-  }
-};
+  const response = await fetch(`${API_PREFIX}exercises/${id}`);
+  if (!response.ok) throw new Error("Failed to fetch exercise by id");
+  const data = await response.json();
 
+  return {
+    ...data,
+    video_url: data.videos?.[0]?.video_url || null,
+  };
+};
 
 export const uploadExerciseVideo = async (id, video_file) => {
   if (video_file instanceof File && id) {
@@ -127,4 +125,26 @@ export const updateExercise = async (id, data) => {
 export const deleteExercise = async (id) => {
   console.log("🗑️ [DELETE] /exercises/" + id);
   await axios.delete(`${API_PREFIX}exercises/${id}`);
+};
+
+export const deleteExerciseVideo = async (videoId) => {
+  try {
+    const res = await fetch(`${API_PREFIX}exercises/${videoId}/video`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText || "Xoá video thất bại");
+    }
+
+    console.log("✅ Đã xoá video:", videoId);
+    return true;
+  } catch (err) {
+    console.error("❌ Lỗi xoá video:", err);
+    throw err;
+  }
 };

@@ -33,12 +33,12 @@ export default function LandingPageBan() {
 
         <div className="text-sm text-gray-800 mb-6">
           Liên hệ Admin để được hỗ trợ:<br />
-          📞 <a href="tel:0909123456" className="text-blue-600 font-medium">0702 050 435</a><br />
+          📞 <a href="tel:0912118365" className="text-blue-600 font-medium">0912118365</a><br />
         </div>
 
         <button
           className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition"
-          onClick={() => window.location.href = 'https://zalo.me/0702050435'}
+          onClick={() => window.location.href = 'https://zalo.me/0912118365'}
         >
           Nhắn qua Zalo
         </button>

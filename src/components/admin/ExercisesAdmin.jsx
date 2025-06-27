@@ -8,6 +8,7 @@ import {
   createExercise,
   updateExercise,
   uploadExerciseVideo,
+  deleteExerciseVideo,
   API_PREFIX
 } from "../../services/ExerciseService";
 
@@ -139,39 +140,62 @@ const Exercises = () => {
                       <td className="px-4 py-3 border border-gray-300">{item.recommended_reps}</td>
                       <td className="px-4 py-3 border border-gray-300">{item.rest_between_sets}</td>
                       <td className="px-4 py-3 text-center border border-gray-300">
-                        {item.video_url ? (
-                          <a
-                            href={`${API_PREFIX}exercises/videos/${item.video_url}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                          >
-                            <FaVideo />
-                          </a>
-                        ) : (
-                          <>
-                            <label className="cursor-pointer text-green-600 hover:text-green-800">
-                              <FaPlus />
-                              <input
-                                type="file"
-                                accept="video/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  const file = e.target.files[0];
-                                  if (file) {
-                                    try {
-                                      await uploadExerciseVideo(item.id, file);
-                                      alert("Tải video thành công!");
-                                      fetchExercises(); // cập nhật lại giao diện
-                                    } catch (err) {
-                                      console.error("❌ Upload lỗi:", err);
-                                      alert("Lỗi khi tải video.");
-                                    }
+                        {Array.isArray(item.videos) && item.videos.length > 0 ? (
+                          <div className="relative group inline-flex items-center justify-center">
+                            <a
+                              href={`${API_PREFIX}exercises/videos/${item.videos[0].video_url}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800"
+                              title="Xem video"
+                            >
+                              <FaVideo size={18} />
+                            </a>
+
+                            {/* Nút xoá khi hover */}
+                            <button
+                              onClick={async () => {
+                                const confirmed = window.confirm("Bạn có chắc muốn xoá video này?");
+                                if (confirmed) {
+                                  try {
+                                    const videoId = item.videos[0].video_id;
+                                    await deleteExerciseVideo(videoId);
+                                    alert("Đã xoá video!");
+                                    fetchExercises();
+                                  } catch (err) {
+                                    console.error("❌ Lỗi xoá video:", err);
+                                    alert("Không xoá được video.");
                                   }
-                                }}
-                              />
-                            </label>
-                          </>
+                                }
+                              }}
+                              className="absolute -top-2 -right-2 hidden group-hover:flex w-5 h-5 items-center justify-center text-xs text-white bg-red-500 rounded-full shadow cursor-pointer"
+                              title="Xoá video"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ) : (
+                          <label className="cursor-pointer text-green-600 hover:text-green-800" title="Tải video">
+                            <FaPlus />
+                            <input
+                              type="file"
+                              accept="video/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  try {
+                                    await uploadExerciseVideo(item.id, file);
+                                    alert("Tải video thành công!");
+                                    fetchExercises(); // 👈 cập nhật lại danh sách
+                                  } catch (err) {
+                                    console.error("❌ Upload lỗi:", err);
+                                    alert("Lỗi khi tải video.");
+                                  }
+                                }
+                              }}
+                            />
+                          </label>
                         )}
                       </td>
                       <td className="px-4 py-3 flex gap-3">

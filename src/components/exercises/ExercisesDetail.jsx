@@ -46,9 +46,9 @@ const ExerciseDetail = () => {
       {/* BÊN TRÁI */}
       <div className="w-full md:w-1/2 p-6 relative">
         <div className="mb-6 mt-10">
-          {exercise.video_url ? (
+          {exercise.videos && exercise.videos.length > 0 ? (
             <video
-              src={`${API_PREFIX}exercises/videos/${exercise.video_url}`}
+              src={`${API_PREFIX}exercises/videos/${exercise.videos[0].video_url}`}
               controls
               className="w-full rounded-lg shadow"
             />
